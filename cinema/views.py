@@ -8,11 +8,11 @@ from cinema.models import (
     MovieSession
 )
 from cinema.serializers import (
-    GenreSerializer, GenreListSerializer,
+    GenreSerializer,
     ActorSerializer,
     CinemaHallSerializer,
-    MovieSerializer,
-    MovieSessionSerializer, ActorListSerializer, MovieListSerializer
+    MovieSerializer, MovieListSerializer, MovieCreateUpdateSerializer,
+    MovieSessionSerializer, MovieSessionListSerializer, MovieSessionCreateUpdateSerializer,
 )
 
 
@@ -20,25 +20,10 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return GenreListSerializer
-        elif self.action == "retrieve":
-            return GenreSerializer
-
-        return self.serializer_class
-
 
 class ActorViewSet(viewsets.ModelViewSet):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return ActorListSerializer
-        elif self.action == "retrieve":
-            return ActorSerializer
-        return self.serializer_class
 
 
 class CinemaHallViewSet(viewsets.ModelViewSet):
@@ -55,9 +40,20 @@ class MovieViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return MovieListSerializer
+        elif self.action in ("create", "update", "partial_update"):
+            return MovieCreateUpdateSerializer
         return self.serializer_class
 
 
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = MovieSession.objects.all()
     serializer_class = MovieSessionSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return MovieSessionListSerializer
+        elif self.action == "retrieve":
+            return MovieSessionSerializer
+        elif self.action in ("create", "update", "partial_update"):
+            return MovieSessionCreateUpdateSerializer
+        return self.serializer_class
