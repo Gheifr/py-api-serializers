@@ -94,6 +94,7 @@ class MovieListSerializer(serializers.ModelSerializer):
             "actors",
         )
 
+
 class MovieSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieSession
